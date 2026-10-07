@@ -1,32 +1,32 @@
 cask "aditor" do
-  # Tauri names its macOS DMGs with these exact fragments, so `arch` doubles as
-  # the filename token below.
-  arch arm: "aarch64", intel: "x64"
+  version "0.1.1"
+  # Placeholder until v0.1.1 is published: take the zip's line from the
+  # release's SHA256SUMS.txt.
+  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
 
-  version "0.1.0"
-  sha256 arm:   "0000000000000000000000000000000000000000000000000000000000000000",
-         intel: "0000000000000000000000000000000000000000000000000000000000000000"
-
-  url "https://github.com/lazap/aditor/releases/download/v#{version}/Aditor_#{version}_#{arch}.dmg",
+  # The zip, not the DMG: every release ships the zip, while the DMG is
+  # skipped whenever Tauri's DMG packaging fails.
+  url "https://github.com/lazap/aditor/releases/download/v#{version}/Aditor_#{version}_aarch64.zip",
       verified: "github.com/lazap/aditor/"
 
   name "Aditor"
   desc "Lightweight editor whose main pane is an agent CLI"
   homepage "https://github.com/lazap/aditor"
 
+  # Releases are built for Apple Silicon only.
+  depends_on arch: :arm64
   # Keep in step with bundle.macOS.minimumSystemVersion in tauri.conf.json.
   depends_on macos: ">= :sonoma"
 
   app "Aditor.app"
 
-  caveats <<~EOS
-    Aditor is not yet signed with an Apple Developer ID certificate, so macOS
-    Gatekeeper will refuse to open it after installation. To allow it:
-
-      xattr -dr com.apple.quarantine "/Applications/Aditor.app"
-
-    This step goes away once signed builds are published.
-  EOS
+  # Builds are ad-hoc signed but not notarized, so Gatekeeper would block the
+  # first launch of a quarantined copy. Clearing the flag here makes the
+  # install open like any other app.
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Aditor.app"]
+  end
 
   # The UI keeps its state in the webview's localStorage, which WebKit stores
   # under the bundle identifier rather than alongside the app.

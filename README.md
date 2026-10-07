@@ -13,15 +13,8 @@ brew install --cask aditor
 Homebrew 6 asks you to explicitly trust a third-party tap the first time it
 evaluates one. That prompt is expected.
 
-Aditor is not yet signed with an Apple Developer ID certificate, so macOS
-Gatekeeper will refuse to open it after installation. Clear the quarantine
-attribute once:
-
-```sh
-xattr -dr com.apple.quarantine "/Applications/Aditor.app"
-```
-
-This step goes away once signed builds are published.
+Aditor builds are ad-hoc signed but not notarized. The cask clears the
+quarantine flag after installing, so the app opens without a Gatekeeper prompt.
 
 ## Updating
 
@@ -31,7 +24,11 @@ brew update && brew upgrade --cask aditor
 
 ## Maintenance
 
-`Casks/aditor.rb` is rewritten automatically by the `update-cask` workflow in
-[lazap/aditor](https://github.com/lazap/aditor) whenever a release is published
-there. Edit the cask directly only for changes that aren't the version or the
-checksums.
+After publishing a release in [lazap/aditor](https://github.com/lazap/aditor),
+update `version` in `Casks/aditor.rb` and set `sha256` to the
+`Aditor_<version>_aarch64.zip` line of that release's `SHA256SUMS.txt`, then
+check it:
+
+```sh
+brew audit --cask --strict lazap/aditor/aditor
+```
