@@ -17,6 +17,11 @@ cask "aditor" do
   # Keep in step with bundle.macOS.minimumSystemVersion in tauri.conf.json.
   depends_on macos: ">= :sonoma"
 
+  # From 0.3.0 the app updates itself in place, so `brew upgrade` leaves it
+  # alone unless given --greedy. Brew's recorded version can then trail the
+  # app's; nothing acts on that.
+  auto_updates true
+
   app "Aditor.app"
 
   # Builds are ad-hoc signed but not notarized, so Gatekeeper would block the
