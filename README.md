@@ -24,8 +24,9 @@ brew update && brew upgrade --cask aditor
 
 ## Maintenance
 
-After publishing a release in [lazap/aditor](https://github.com/lazap/aditor),
-update `version` in `Casks/aditor.rb` and set `sha256` to the
+The release script in [lazap/aditor](https://github.com/lazap/aditor) bumps
+`version` and `sha256` in `Casks/aditor.rb` after each live release. If it
+could not, it prints both values: set `version`, and set `sha256` to the
 `Aditor_<version>_aarch64.zip` line of that release's `SHA256SUMS.txt`, then
 check it:
 
