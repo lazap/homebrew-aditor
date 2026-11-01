@@ -1,7 +1,7 @@
 cask "aditor" do
-  version "0.4.3"
+  version "0.5.0"
   # The zip's line from the release's SHA256SUMS.txt.
-  sha256 "8150ded9bbb76e21446933c66898e4753f36dceda1b8f928bee09308a9d6ee15"
+  sha256 "ec888f5bb6c207e233c07e3419a58a0f31455541be3d7f77c6885a68249f50a9"
 
   # The zip, not the DMG: every release ships the zip, while the DMG is
   # skipped whenever Tauri's DMG packaging fails.
